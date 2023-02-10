@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,15 +16,20 @@ namespace BrandMonitor.Migrations
                 name: "Task",
                 columns: table => new
                 {
-                    GUID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Status = table.Column<string>(type: "text", nullable: false),
+                    guid = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuid_generate_v4()"),
+                    Status = table.Column<string>(type: "varchar", maxLength: 16, nullable: false),
                     Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Task", x => x.GUID);
+                    table.PrimaryKey("PK_Task", x => x.guid);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Task_guid",
+                table: "Task",
+                column: "guid",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

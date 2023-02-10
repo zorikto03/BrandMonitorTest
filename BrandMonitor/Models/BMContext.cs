@@ -33,14 +33,19 @@ namespace BrandMonitor.Models
                 entity.ToTable("Task")
                     .HasKey(e => e.Guid);
 
+                entity.HasIndex(e => e.Guid)
+                    .IsUnique(); 
+
                 entity.Property(e => e.Guid)
-                    .HasColumnName("GUID")
-                    .HasColumnType("integer");
-                    //.HasColumnType("uuid")
-                    //.HasDefaultValueSql("uuid_generate_v4()");
+                    .HasColumnName("guid")
+                    //.HasColumnType("integer");
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuid_generate_v4()");
 
                 entity.Property(e => e.Status)
-                    .HasColumnName("Status");
+                    .HasColumnName("Status")
+                    .HasMaxLength(16)
+                    .HasColumnType("varchar");
 
                 entity.Property(e => e.Timestamp)
                     .HasColumnName("Timestamp");

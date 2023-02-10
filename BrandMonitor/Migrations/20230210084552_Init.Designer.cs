@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BrandMonitor.Migrations
 {
     [DbContext(typeof(BMContext))]
-    [Migration("20230209102642_Init")]
+    [Migration("20230210084552_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,16 +27,16 @@ namespace BrandMonitor.Migrations
 
             modelBuilder.Entity("BrandMonitor.Models.Task", b =>
                 {
-                    b.Property<int>("Guid")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("GUID");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("guid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(16)
+                        .HasColumnType("varchar")
                         .HasColumnName("Status");
 
                     b.Property<DateTime>("Timestamp")
@@ -44,6 +44,9 @@ namespace BrandMonitor.Migrations
                         .HasColumnName("Timestamp");
 
                     b.HasKey("Guid");
+
+                    b.HasIndex("Guid")
+                        .IsUnique();
 
                     b.ToTable("Task", (string)null);
                 });

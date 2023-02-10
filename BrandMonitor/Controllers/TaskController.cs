@@ -29,7 +29,7 @@ namespace BrandMonitor.Controllers
             }
         }
 
-        async void TaskRunning(int guid)
+        async void TaskRunning(Guid guid)
         {
             using (var context = new BMContext())
             {
@@ -49,46 +49,23 @@ namespace BrandMonitor.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(string id)
         {
-            var task = _context.Tasks.FirstOrDefault(x => x.Guid == id);
-            if (task != null)
+            if (Guid.TryParse(id, out var taskGuid))
             {
-                return Ok(JsonConvert.SerializeObject(task));
+                var task = _context.Tasks.FirstOrDefault(x => x.Guid == taskGuid);
+                if (task != null)
+                {
+                    return Ok(JsonConvert.SerializeObject(task));
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             else
             {
-                return NotFound();
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-       
-        // POST: TaskController1/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                return BadRequest();
             }
         }
     }

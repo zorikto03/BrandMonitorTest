@@ -11,7 +11,7 @@ namespace BrandMonitor.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]
-        public int Guid { get; set; }
+        public Guid Guid { get; set; }
         public string Status { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; }
 
