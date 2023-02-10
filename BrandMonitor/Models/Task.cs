@@ -5,7 +5,7 @@ namespace BrandMonitor.Models
 {
     public class Task
     {
-        public const string created = "Created";
+        public const string created = "created";
         public const string finished = "finished";
         public const string running = "running";
 
@@ -17,7 +17,7 @@ namespace BrandMonitor.Models
 
         public Task()
         {
-            Status = "created";
+            Status = created;
             Timestamp = DateTime.UtcNow;
         }
 
