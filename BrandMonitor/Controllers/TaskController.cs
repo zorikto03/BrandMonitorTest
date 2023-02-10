@@ -13,7 +13,7 @@ namespace BrandMonitor.Controllers
         {
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult Get()
         {
             using var context = new BMContext();
