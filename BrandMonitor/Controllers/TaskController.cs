@@ -9,24 +9,20 @@ namespace BrandMonitor.Controllers
     [Route("[controller]")]
     public class TaskController : Controller
     {
-        private readonly BMContext _context;
-        public TaskController(BMContext context)
+        public TaskController()
         {
-            _context = context;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            using (var context = new BMContext())
-            {
-                var task = new Models.Task();
-                _context.Tasks.Add(task);
-                _context.SaveChanges();
-                TaskRunning(task.Guid);
+            using var context = new BMContext();
+            var task = new Models.Task();
+            context.Tasks.Add(task);
+            context.SaveChanges();
+            TaskRunning(task.Guid);
 
-                return Accepted(task.Guid);
-            }
+            return Accepted(task.Guid);
         }
 
         async void TaskRunning(Guid guid)
@@ -53,7 +49,8 @@ namespace BrandMonitor.Controllers
         {
             if (Guid.TryParse(id, out var taskGuid))
             {
-                var task = _context.Tasks.FirstOrDefault(x => x.Guid == taskGuid);
+                using var context = new BMContext();
+                var task = context.Tasks.FirstOrDefault(x => x.Guid == taskGuid);
                 if (task != null)
                 {
                     return Ok(JsonConvert.SerializeObject(task));
